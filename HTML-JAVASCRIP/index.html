@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario Evaluación 2</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 30px;
+      color: #2c3e50;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      flex: 1 1 280px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #34495e;
+    }
+
+    input, select {
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #2980b9;
+      box-shadow: 0 0 5px rgba(41, 128, 185, 0.5);
+      outline: none;
+    }
+
+    input.error, select.error {
+      border-color: #e74c3c;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="button"]:first-child {
+      background-color: #95a5a6;
+      color: white;
+    }
+
+    button[type="button"]:first-child:hover {
+      background-color: #7f8c8d;
+    }
+
+    button[type="button"]:last-child {
+      background-color: #3498db;
+      color: white;
+    }
+
+    button[type="button"]:last-child:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Formulario de Registro</h2>
+  <form id="formulario" novalidate>
+    <div class="row">
+      <div class="form-group">
+        <label for="nombre">Nombre Completo *</label>
+        <input type="text" id="nombre" required>
+        <div class="error-message" id="error-nombre"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="rut">RUT *</label>
+        <input type="text" id="rut" placeholder="12345678-9" required>
+        <div class="error-message" id="error-rut"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+        <input type="date" id="fechaNacimiento">
+        <div class="error-message" id="error-fecha"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="cv">Currículum Vitae</label>
+        <input type="file" id="cv" accept=".pdf,.docx">
+        <div class="error-message" id="error-cv"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Correo Electrónico *</label>
+        <input type="email" id="email" required>
+        <div class="error-message" id="error-email"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="genero">Género</label>
+        <select id="genero">
+          <option value="">Seleccione...</option>
+          <option value="masculino">Masculino</option>
+          <option value="femenino">Femenino</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="form-group">
+        <label for="contrasena">Contraseña *</label>
+        <input type="password" id="contrasena" required>
+        <div class="error-message" id="error-contrasena"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="repetirContrasena">Repetir Contraseña *</label>
+        <input type="password" id="repetirContrasena" required>
+        <div class="error-message" id="error-repetir"></div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" onclick="cancelarFormulario()">Cancelar</button>
+      <button type="button" onclick="validarFormulario()">Guardar</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function cancelarFormulario() {
+    document.getElementById("formulario").reset();
+    limpiarErrores();
+  }
+
+  function limpiarErrores() {
+    document.querySelectorAll("input, select").forEach(el => el.classList.remove("error"));
+    document.querySelectorAll(".error-message").forEach(el => el.textContent = "");
+  }
+
+  function validarRUT(rut) {
+    return /^\d{7,8}-[kK\d]$/.test(rut);
+  }
+
+  function validarEmail(email) {
+    return /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(email);
+  }
+
+  function validarContrasena(pass) {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,12}$/.test(pass);
+  }
+
+  function soloLetras(texto) {
+    return /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(texto);
+  }
+
+  function validarFormulario() {
+    limpiarErrores();
+    let valido = true;
+
+    const nombre = document.getElementById("nombre");
+    const rut = document.getElementById("rut");
+    const fecha = document.getElementById("fechaNacimiento");
+    const cv = document.getElementById("cv");
+    const email = document.getElementById("email");
+    const contrasena = document.getElementById("contrasena");
+    const repetir = document.getElementById("repetirContrasena");
+
+    if (nombre.value.trim() === "" || !soloLetras(nombre.value.trim())) {
+      setError(nombre, "error-nombre", "Nombre inválido. Solo letras y espacios.");
+      valido = false;
+    }
+
+    if (!validarRUT(rut.value.trim())) {
+      setError(rut, "error-rut", "RUT inválido.");
+      valido = false;
+    }
+
+    if (cv.files.length > 0) {
+      const tipo = cv.files[0].type;
+      if (!["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"].includes(tipo)) {
+        setError(cv, "error-cv", "Archivo no válido (.pdf o .docx).");
+        valido = false;
+      }
+    }
+
+    if (!validarEmail(email.value.trim())) {
+      setError(email, "error-email", "Correo inválido.");
+      valido = false;
+    }
+
+    if (!validarContrasena(contrasena.value.trim())) {
+      setError(contrasena, "error-contrasena", "Debe tener mayúscula, minúscula, número y 6-12 caracteres.");
+      valido = false;
+    }
+
+    if (contrasena.value !== repetir.value) {
+      setError(repetir, "error-repetir", "Las contraseñas no coinciden.");
+      valido = false;
+    }
+
+    if (valido) {
+      alert("Formulario enviado correctamente.");
+    }
+  }
+
+  function setError(input, errorId, mensaje) {
+    input.classList.add("error");
+    document.getElementById(errorId).textContent = mensaje;
+  }
+</script>
+
+</body>
+</html>
